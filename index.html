@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPDV Enterprise 1.0</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f2f4f7;
+}
+
+.topo{
+    background:#003366;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.container{
+    display:flex;
+    min-height:calc(100vh - 70px);
+}
+
+.esquerda{
+    flex:3;
+    background:white;
+    padding:20px;
+}
+
+.direita{
+    flex:1;
+    background:#0d1b2a;
+    color:white;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#003366;
+    color:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+.total{
+    margin-top:20px;
+    font-size:40px;
+    color:red;
+    font-weight:bold;
+}
+
+button{
+    width:100%;
+    padding:18px;
+    border:none;
+    margin-top:10px;
+    border-radius:8px;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.dinheiro{
+    background:#0066cc;
+}
+
+.pix{
+    background:green;
+}
+
+.credito{
+    background:orange;
+}
+
+.debito{
+    background:red;
+}
+
+.finalizar{
+    background:#28a745;
+}
+
+.info{
+    margin-top:30px;
+    line-height:35px;
+}
+
+.produtoAtual{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+    border:2px solid #003366;
+}
+
+#nomeProduto{
+    color:#003366;
+    font-size:28px;
+}
+
+#precoProduto{
+    color:red;
+    font-size:32px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="cupom" style="display:none">
+<div id="itensCupom"></div>
+<h3 id="totalCupom"></h3>
+<p id="pagamentoCupom"></p>
+<p id="trocoCupom"></p>
+</div>
+
+<div class="topo">
+    <h1>SPDV ENTERPRISE 1.0</h1>
+    <h2>
+Operador:
+<span id="operador"></span>
+</h2>
+</div>
+
+<div class="container">
+
+<!-- ESQUERDA -->
+<div class="esquerda">
+
+<input
+id="codigo"
+type="text"
+placeholder="Código de barras"
+oninput="consultarProduto()"
+onkeydown="if(event.key=='Enter') irQuantidade()">
+
+<div class="produtoAtual">
+
+<h2 id="nomeProduto">
+AGUARDANDO PRODUTO...
+</h2>
+
+<h3 id="precoProduto">
+R$ 0,00
+</h3>
+
+</div>
+
+<input
+type="number"
+id="quantidade"
+value="1"
+step="0.001"
+placeholder="Quantidade ou Peso (Kg)">
+
+<table>
+
+<thead>
+<tr>
+<th>Código</th>
+<th>Produto</th>
+<th>Qtd</th>
+<th>Valor</th>
+<th>Total</th>
+<th>Ação</th>
+</tr>
+</thead>
+
+<tbody id="itens">
+
+</tbody>
+
+</table>
+
+<div class="total" id="total">
+TOTAL: R$ 0,00
+</div>
+
+</div>
+
+<!-- DIREITA -->
+<div class="direita">
+
+<button class="dinheiro"
+onclick="selecionarPagamento('DINHEIRO')">
+DINHEIRO
+</button>
+
+<button class="pix"
+onclick="selecionarPagamento('PIX')">
+PIX
+</button>
+
+<button class="credito"
+onclick="selecionarPagamento('CRÉDITO')">
+CRÉDITO
+</button>
+
+<button class="debito"
+onclick="selecionarPagamento('DÉBITO')">
+DÉBITO
+</button>
+
+<button class="finalizar"
+onclick="finalizarVenda()">
+FINALIZAR VENDA
+</button>
+
+<div id="pagamentoDinheiro" style="display:none;margin-top:15px;">
+
+    <h3>Valor Recebido</h3>
+
+    <input
+    type="number"
+    id="valorRecebido"
+    placeholder="Digite o valor recebido"
+    onkeyup="calcularTroco()"
+    onkeydown="enterFinalizar(event)">
+
+    <h2 id="troco"
+    style="color:#fff;margin-top:15px;">
+        Troco: R$ 0,00
+    </h2>
+
+</div>
+
+<div class="info">
+
+Caixa: 01<br>
+Operador: Admin<br>
+
+Itens:
+<span id="qtdItens">0</span><br>
+
+Hora:
+<span id="horaAtual"></span><br>
+
+Data:
+<span id="dataAtual"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="caixa.js"></script>
+
+<script>
+
+function atualizarRelogio(){
+
+    let agora = new Date();
+
+    document.getElementById("horaAtual").innerHTML =
+    agora.toLocaleTimeString('pt-BR');
+
+    document.getElementById("dataAtual").innerHTML =
+    agora.toLocaleDateString('pt-BR');
+
+}
+
+setInterval(atualizarRelogio,1000);
+
+atualizarRelogio();
+
+</script>
+
+</body>
+</html>

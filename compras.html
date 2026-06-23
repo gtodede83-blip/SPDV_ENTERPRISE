@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>SPDV Enterprise - Compras</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+margin:0;
+}
+
+header{
+background:#003366;
+color:white;
+padding:15px;
+font-size:30px;
+}
+
+.container{
+width:95%;
+margin:auto;
+margin-top:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px #ccc;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+font-size:18px;
+}
+
+button{
+background:green;
+color:white;
+border:none;
+padding:15px;
+width:100%;
+margin-top:15px;
+font-size:20px;
+cursor:pointer;
+}
+
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+background:white;
+}
+
+th{
+background:#003366;
+color:white;
+padding:10px;
+}
+
+td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+SPDV ENTERPRISE - ENTRADA DE MERCADORIAS
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<input
+id="codigo"
+placeholder="Código do Produto"
+onkeyup="buscarProduto()"
+onkeydown="if(event.key=='Enter') irQuantidade()">
+
+<input
+id="descricao"
+placeholder="Descrição">
+
+<input
+id="quantidade"
+type="number"
+step="0.001"
+placeholder="Quantidade"
+onkeydown="if(event.key=='Enter') irCusto()">
+
+<input
+id="custo"
+type="number"
+step="0.01"
+placeholder="Preço de Custo"
+onkeydown="if(event.key=='Enter') entradaMercadoria()">
+
+<button onclick="entradaMercadoria()">
+DAR ENTRADA NO ESTOQUE
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Código</th>
+<th>Produto</th>
+<th>Quantidade</th>
+<th>Custo</th>
+</tr>
+
+</thead>
+
+<tbody id="lista">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let compras = [];
+
+// BUSCAR PRODUTO
+async function buscarProduto(){
+
+    let codigo = document.getElementById("codigo").value;
+
+    if(codigo==""){
+        document.getElementById("descricao").value="";
+        return;
+    }
+
+    try{
+
+        let resposta =
+        await fetch(`http://localhost:3000/produto/${codigo}`);
+
+        if(!resposta.ok){
+            return;
+        }
+
+        let produto = await resposta.json();
+
+        document.getElementById("descricao").value =
+        produto.descricao;
+
+    }
+    catch(erro){
+
+        console.log(erro);
+
+    }
+
+}
+
+
+// DAR ENTRADA
+async function entradaMercadoria(){
+
+    let codigo =
+    document.getElementById("codigo").value;
+
+    let descricao =
+    document.getElementById("descricao").value;
+
+    let quantidade =
+    parseFloat(document.getElementById("quantidade").value);
+
+    let custo =
+    parseFloat(document.getElementById("custo").value);
+
+    if(codigo=="" || !quantidade){
+
+        alert("Preencha os campos!");
+
+        return;
+
+    }
+
+    try{
+
+        await fetch(
+        "http://localhost:3000/entrada",
+        {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                codigo,
+                quantidade
+
+            })
+
+        });
+
+        compras.push({
+
+            codigo,
+            descricao,
+            quantidade,
+            custo
+
+        });
+
+        atualizarTabela();
+
+        alert("Entrada realizada com sucesso!");
+
+        // limpa os campos
+        document.getElementById("codigo").value="";
+        document.getElementById("descricao").value="";
+        document.getElementById("quantidade").value="";
+        document.getElementById("custo").value="";
+
+        // volta para o código
+        document.getElementById("codigo").focus();
+
+    }
+    catch(erro){
+
+        console.log(erro);
+
+        alert("Erro ao registrar entrada");
+
+    }
+
+}
+
+
+// ATUALIZAR TABELA
+function atualizarTabela(){
+
+    let tabela = "";
+
+    compras.forEach(p=>{
+
+        tabela += `
+        <tr>
+
+        <td>${p.codigo}</td>
+
+        <td>${p.descricao}</td>
+
+        <td>${p.quantidade}</td>
+
+        <td>R$ ${Number(p.custo).toFixed(2)}</td>
+
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("lista").innerHTML =
+    tabela;
+
+}
+
+function irQuantidade(){
+
+    if(document.getElementById("codigo").value==""){
+        return;
+    }
+
+    document.getElementById("quantidade").focus();
+    document.getElementById("quantidade").select();
+
+}
+
+function irCusto(){
+
+    if(document.getElementById("quantidade").value==""){
+        return;
+    }
+
+    document.getElementById("custo").focus();
+    document.getElementById("custo").select();
+
+}
+
+</script>
+
+
+</body>
+</html>
