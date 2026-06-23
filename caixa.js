@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 // CONSULTAR PRODUTO
 async function consultarProduto(){
 
-    let codigo = document.getElementById("codigo").value;
+    let codigo =
+    document.getElementById("codigo").value;
 
     if(codigo==""){
         return;
@@ -52,29 +53,43 @@ async function consultarProduto(){
     try{
 
         let resposta = await fetch(
-    `https://spdv-enterprises.onrender.com/produto/${codigo}`
-);
+            `https://spdv-enterprises.onrender.com/produto/${codigo}`
+        );
 
         if(!resposta.ok){
+
+            document.getElementById("nomeProduto").innerHTML =
+            "PRODUTO NÃO ENCONTRADO";
+
+            document.getElementById("precoProduto").innerHTML =
+            "R$ 0,00";
+
+            produtoAtual = null;
+
             return;
         }
 
         produtoAtual = await resposta.json();
 
+        console.log(produtoAtual);
+
+        alert(produtoAtual.descricao);
+
         document.getElementById("nomeProduto").innerHTML =
-            produtoAtual.descricao;
+        produtoAtual.descricao;
 
         document.getElementById("precoProduto").innerHTML =
-            "R$ " + Number(produtoAtual.preco).toFixed(2);
+        "R$ " + Number(produtoAtual.preco).toFixed(2);
 
-    }catch(erro){
+    }
+    catch(erro){
 
+        console.log("ERRO:");
         console.log(erro);
 
     }
 
 }
-
 
 // ENTER NO CÓDIGO
 function irQuantidade(){
@@ -471,7 +486,7 @@ Operador: ${usuario.nome}
 
 <div class="center">
 OBRIGADO PELA PREFERÊNCIA!<br>
-VOLTE SEMPREs
+VOLTE SEMPRE
 </div>
 
 </body>
@@ -485,7 +500,7 @@ setTimeout(() => {
     tela.focus();
 
     tela.print();
-s
+
     setTimeout(() => {
         tela.close();
     }, 1000);
