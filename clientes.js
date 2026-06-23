@@ -21,7 +21,7 @@ async function salvarCliente(){
     try{
 
         await fetch(
-            "http://localhost:3000/clientes",
+            "https://spdv-enterprises.onrender.com/clientes",
             {
                 method:"POST",
 
@@ -71,7 +71,7 @@ async function listarClientes(){
 
         let resposta =
         await fetch(
-            "http://localhost:3000/clientes"
+            "https://spdv-enterprises.onrender.com/clientes"
         );
 
         let clientes =
@@ -141,7 +141,7 @@ async function excluirCliente(id){
 
         await fetch(
 
-            `http://localhost:3000/clientes/${id}`,
+            `https://spdv-enterprises.onrender.com/clientes/${id}`,
 
             {
                 method:"DELETE"

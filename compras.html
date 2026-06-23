@@ -149,7 +149,7 @@ async function buscarProduto(){
     try{
 
         let resposta =
-        await fetch(`http://localhost:3000/produto/${codigo}`);
+        await fetch(`https://spdv-enterprises.onrender.com/produto/${codigo}`);
 
         if(!resposta.ok){
             return;
@@ -196,7 +196,7 @@ async function entradaMercadoria(){
     try{
 
         await fetch(
-        "http://localhost:3000/entrada",
+        "https://spdv-enterprises.onrender.com/entrada",
         {
 
             method:"POST",

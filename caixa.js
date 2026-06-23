@@ -52,8 +52,8 @@ async function consultarProduto(){
     try{
 
         let resposta = await fetch(
-            `http://localhost:3000/produto/${codigo}`
-        );
+    `https://spdv-enterprises.onrender.com/produto/${codigo}`
+);
 
         if(!resposta.ok){
             return;
@@ -252,7 +252,7 @@ async function finalizarVenda(){
     try{
 
         await fetch(
-            "http://localhost:3000/venda",
+            "https://spdv-enterprises.onrender.com/venda",
             {
 
                 method:"POST",

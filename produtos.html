@@ -126,7 +126,7 @@ th,td{
 
 async function listarProdutos(){
 
-    let resposta = await fetch("http://localhost:3000/produtos");
+    let resposta = await fetch("https://spdv-enterprises.onrender.com/produtos");
 
     let produtos = await resposta.json();
 
@@ -160,7 +160,7 @@ async function excluirProduto(id){
     if(!confirm("Deseja excluir este produto?"))
         return;
 
-    await fetch(`http://localhost:3000/produtos/${id}`,{
+    await fetch(`https://spdv-enterprises.onrender.com/produtos/${id}`,{
         method:"DELETE"
     });
 
@@ -180,7 +180,7 @@ async function salvarProduto(){
         return;
     }
 
-    await fetch("http://localhost:3000/produtos",{
+    await fetch("https://spdv-enterprises.onrender.com/produtos",{
 
         method:"POST",
 

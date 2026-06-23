@@ -22,22 +22,36 @@ app.get('/', (req, res) => {
 });
 
 // LISTAR PRODUTOS
-app.get('/produtos', async (req, res) => {
+app.get('/produto/:codigo', async (req,res)=>{
 
-    try {
+    try{
+
+        console.log("CONSULTANDO PRODUTO:", req.params.codigo);
 
         const resultado = await pool.query(
-            'SELECT * FROM produtos ORDER BY descricao'
+            'SELECT * FROM produtos WHERE codigo=$1',
+            [req.params.codigo]
         );
 
-        res.json(resultado.rows);
+        console.log(resultado.rows);
 
-    } catch (erro) {
+        if(resultado.rows.length === 0){
 
+            return res.status(404).json({
+                erro:"Produto não encontrado"
+            });
+
+        }
+
+        res.json(resultado.rows[0]);
+
+    }catch(erro){
+
+        console.log("ERRO PRODUTO:");
         console.log(erro);
 
         res.status(500).json({
-            erro: 'Erro ao consultar produtos'
+            erro: erro.message
         });
 
     }
