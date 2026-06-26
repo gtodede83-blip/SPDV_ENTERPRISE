@@ -43,8 +43,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 // CONSULTAR PRODUTO
 async function consultarProduto(){
 
-    let codigo =
-    document.getElementById("codigo").value;
+    let codigo = document.getElementById("codigo").value.trim();
 
     if(codigo==""){
         return;
@@ -56,7 +55,7 @@ async function consultarProduto(){
             `https://spdv-enterprises.onrender.com/produto/${codigo}`
         );
 
-        if(!resposta.ok){
+        if(resposta.status==404){
 
             document.getElementById("nomeProduto").innerHTML =
             "PRODUTO NÃO ENCONTRADO";
@@ -73,8 +72,6 @@ async function consultarProduto(){
 
         console.log(produtoAtual);
 
-        alert(produtoAtual.descricao);
-
         document.getElementById("nomeProduto").innerHTML =
         produtoAtual.descricao;
 
@@ -84,12 +81,12 @@ async function consultarProduto(){
     }
     catch(erro){
 
-        console.log("ERRO:");
         console.log(erro);
 
     }
 
 }
+
 
 // ENTER NO CÓDIGO
 function irQuantidade(){
@@ -486,8 +483,10 @@ Operador: ${usuario.nome}
 
 <div class="center">
 OBRIGADO PELA PREFERÊNCIA!<br>
-VOLTE SEMPRE
+VOLTE SEMPREs
 </div>
+
+
 
 </body>
 </html>
@@ -500,11 +499,19 @@ setTimeout(() => {
     tela.focus();
 
     tela.print();
-
+s
     setTimeout(() => {
         tela.close();
     }, 1000);
 
 }, 500);
+
+}
+
+function abrirMenu(){
+
+    document
+    .getElementById("menuLateral")
+    .classList.toggle("ativo");
 
 }

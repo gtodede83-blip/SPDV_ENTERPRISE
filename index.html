@@ -129,9 +129,72 @@ button{
     font-size:32px;
 }
 
+#btnMenu{
+    width:45px;
+    height:45px;
+    font-size:24px;
+    background:white;
+    color:#003366;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.menuLateral{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#0d1b2a;
+    transition:.3s;
+    z-index:9999;
+    padding-top:25px;
+}
+
+.menuLateral.ativo{
+    left:0;
+}
+
+.menuLateral h2{
+    color:white;
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.menuLateral a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:18px 25px;
+    font-size:18px;
+}
+
+.menuLateral a:hover{
+    background:#0066cc;
+}
+
 </style>
 </head>
 <body>
+
+<body>
+
+<div id="menuLateral" class="menuLateral">
+
+    <h2>SPDV ENTERPRISE</h2>
+
+    <a href="index.html">🛒 Caixa</a>
+    <a href="produtos.html">📦 Produtos</a>
+    <a href="clientes.html">👥 Clientes</a>
+    <a href="compras.html">🚚 Compras</a>
+    <a href="estoque.html">📊 Estoque</a>
+    <a href="relatorios.html">📈 Relatórios</a>
+    <a href="login.html">👤 Usuários</a>
+    <a href="configuracoes.html">⚙ Configurações</a>
+    <a href="login.html">🚪 Sair</a>
+
+</div>
 
 <div id="cupom" style="display:none">
 <div id="itensCupom"></div>
@@ -141,11 +204,20 @@ button{
 </div>
 
 <div class="topo">
-    <h1>SPDV ENTERPRISE 1.0</h1>
+
+    <div style="display:flex;align-items:center;gap:15px;">
+
+        <button id="btnMenu" onclick="abrirMenu()">☰</button>
+
+        <h1>SPDV ENTERPRISE 1.0</h1>
+
+    </div>
+
     <h2>
-Operador:
-<span id="operador"></span>
-</h2>
+        Operador:
+        <span id="operador"></span>
+    </h2>
+
 </div>
 
 <div class="container">
@@ -270,6 +342,10 @@ Data:
 
 </div>
 
+<script src="caixa.js"></script>
+
+<script>
+
 function atualizarRelogio(){
 
     let agora = new Date();
@@ -282,6 +358,14 @@ function atualizarRelogio(){
 
 }
 
+setInterval(atualizarRelogio,1000);
+
+atualizarRelogio();
+
+</script>
+
+</body>
+</html>
 setInterval(atualizarRelogio,1000);
 
 atualizarRelogio();
