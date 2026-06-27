@@ -263,27 +263,30 @@ async function finalizarVenda(){
 
     try{
 
-        await fetch(
-            "https://spdv-enterprises.onrender.com/venda",
-            {
+       const resposta = await fetch(
+    "https://spdv-enterprises.onrender.com/venda",
+    {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            itens,
+            total,
+            pagamento:formaPagamento
+        })
+    }
+);
 
-                method:"POST",
+const dados = await resposta.json();
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+if(!resposta.ok){
 
-                body:JSON.stringify({
+    alert(dados.erro);
 
-                    itens,
-                    total,
-                    pagamento:formaPagamento
+    return;
 
-                })
-
-            }
-
-        );
+};
 
 try{
     imprimirCupom();
