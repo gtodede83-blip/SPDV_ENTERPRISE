@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPDV Enterprise - Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f4f6f9;color:#222}
+.topbar{
+height:64px;background:#003366;color:#fff;display:flex;
+align-items:center;justify-content:space-between;
+padding:0 20px;position:fixed;left:0;right:0;top:0;z-index:1000}
+.brand{display:flex;align-items:center;gap:15px}
+.menuBtn{
+width:42px;height:42px;border:none;border-radius:8px;
+background:#fff;color:#003366;font-size:24px;cursor:pointer}
+.sidebar{
+position:fixed;top:64px;left:-260px;width:250px;height:calc(100vh - 64px);
+background:#0d1b2a;color:#fff;transition:.3s;overflow:auto}
+.sidebar.open{left:0}
+.sidebar a{
+display:block;padding:16px 20px;color:#fff;text-decoration:none}
+.sidebar a:hover{background:#0066cc}
+.main{padding:90px 25px 25px}
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;margin-bottom:25px}
+.card{
+background:#fff;border-radius:12px;padding:20px;
+box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.card h3{color:#555;font-size:16px}
+.card .valor{font-size:30px;font-weight:bold;color:#003366;margin-top:10px}
+.grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px}
+.box{
+background:#fff;border-radius:12px;padding:20px;
+box-shadow:0 3px 10px rgba(0,0,0,.12)}
+table{width:100%;border-collapse:collapse}
+th{
+background:#003366;color:#fff;padding:10px}
+td{padding:10px;border-bottom:1px solid #ddd}
+.shortcuts{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:15px}
+.shortcuts button{
+padding:16px;border:none;border-radius:10px;
+background:#003366;color:#fff;font-size:15px;cursor:pointer}
+.shortcuts button:hover{background:#0055aa}
+@media(max-width:900px){
+.grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="brand">
+<button class="menuBtn" onclick="toggleMenu()">☰</button>
+<div>
+<h2>SPDV Enterprise</h2>
+<small>Dashboard</small>
+</div>
+</div>
+<div>
+👤 Operador:
+<strong id="operador">Admin</strong>
+
+|
+
+🕒
+
+<span id="relogio"></span>
+</div>
+</div>
+
+<div class="sidebar" id="menu">
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="index.html">🛒 Caixa</a>
+<a href="produtos.html">📦 Produtos</a>
+<a href="clientes.html">👥 Clientes</a>
+<a href="compras.html">🚚 Compras</a>
+<a href="estoque.html">📊 Estoque</a>
+<a href="vendas.html">💰 Vendas</a>
+<a href="login.html">👤 Usuários</a>
+<a href="relatorios.html">📈 Relatórios</a>
+<a href="configuracoes.html">⚙ Configurações</a>
+<a href="login.html">🚪 Sair</a>
+</div>
+
+<div class="main">
+<h1>Bem-vindo ao SPDV Enterprise</h1>
+<p>Painel Gerencial</p>
+
+<div class="cards">
+<div class="card"><h3>💰 Vendas Hoje</h3><div class="valor">R$ 0,00</div></div>
+<div class="card"><h3>📦 Produtos</h3><div class="valor">0</div></div>
+<div class="card"><h3>👥 Clientes</h3><div class="valor">0</div></div>
+<div class="card"><h3>📊 Estoque</h3><div class="valor">0</div></div>
+</div>
+
+<div class="box" style="margin-bottom:20px">
+<h2>Acesso Rápido</h2><br>
+<div class="shortcuts">
+<button onclick="location.href='index.html'">🛒 Caixa</button>
+<button onclick="location.href='produtos.html'">📦 Produtos</button>
+<button onclick="location.href='clientes.html'">👥 Clientes</button>
+<button onclick="location.href='compras.html'">🚚 Compras</button>
+<button onclick="location.href='estoque.html'">📊 Estoque</button>
+<button onclick="location.href='vendas.html'">💰 Vendas</button>
+<button onclick="location.href='relatorios.html'">📈 Relatórios</button>
+<button onclick="location.href='configuracoes.html'">⚙ Configurações</button>
+</div>
+</div>
+
+<div class="grid">
+<div class="box">
+<h2>Últimas Vendas</h2><br>
+<table>
+<tr><th>Hora</th><th>Cliente</th><th>Valor</th></tr>
+<tr><td>08:20</td><td>---</td><td>R$ 0,00</td></tr>
+<tr><td>09:10</td><td>---</td><td>R$ 0,00</td></tr>
+<tr><td>10:30</td><td>---</td><td>R$ 0,00</td></tr>
+</table>
+</div>
+
+<div class="box">
+<h2>Resumo</h2><br>
+<p>✔ Sistema Online</p><br>
+<p>✔ Banco PostgreSQL</p><br>
+<p>✔ Render</p><br>
+<p>✔ SPDV Enterprise</p>
+</div>
+</div>
+
+</div>
+
+<script>
+function toggleMenu(){
+ document.getElementById('menu').classList.toggle('open');
+}
+setInterval(()=>{
+ document.getElementById('relogio').innerHTML=
+ new Date().toLocaleString('pt-BR');
+},1000);
+</script>
+
+</body>
+</html>

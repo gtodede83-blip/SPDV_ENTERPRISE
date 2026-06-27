@@ -71,12 +71,31 @@ text-align:center;
 
 </style>
 </head>
+
+<script src="js/layout.js"></script>
+<script src="js/menu.js"></script>
+
 <body>
 
-<header>
-SPDV ENTERPRISE - ENTRADA DE MERCADORIAS
-</header>
+<div class="topo">
 
+    <div style="display:flex;align-items:center;gap:15px;">
+
+        <button id="btnMenu" onclick="toggleMenu()">
+            ☰
+        </button>
+
+        <h1>Entrada de Mercadorias</h1>
+
+    </div>
+
+    <div id="usuario">
+        Operador: Admin
+    </div>
+
+</div>
+
+<div id="menu"></div>
 <div class="container">
 
 <div class="card">

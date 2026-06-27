@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPDV Enterprise - Estoque</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f4f6f9}
+.topo{height:70px;background:#003366;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:0 20px}
+.esq{display:flex;align-items:center;gap:15px}
+#btnMenu{width:45px;height:45px;border:none;border-radius:8px;background:#fff;color:#003366;font-size:24px;cursor:pointer}
+.menu{position:fixed;top:70px;left:-260px;width:250px;height:calc(100vh - 70px);background:#0d1b2a;transition:.3s;overflow:auto}
+.menu.open{left:0}
+.menu a{display:block;color:#fff;text-decoration:none;padding:15px 20px}
+.menu a:hover{background:#0066cc}
+main{padding:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-bottom:20px}
+.card,.box{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.valor{font-size:28px;color:#003366;font-weight:bold}
+.filtro{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.filtro input{flex:1;padding:10px}
+button.acao{padding:10px 16px;background:#003366;color:#fff;border:none;border-radius:6px;cursor:pointer}
+table{width:100%;border-collapse:collapse}
+th{background:#003366;color:#fff}
+th,td{padding:10px;border:1px solid #ddd;text-align:center}
+tbody tr:hover{background:#f0f7ff}
+.status-ok{color:green;font-weight:bold}
+.status-baixo{color:#d88a00;font-weight:bold}
+.status-zero{color:red;font-weight:bold}
+</style>
+</head>
+<body>
+
+<header class="topo">
+<div class="esq">
+<button id="btnMenu">☰</button>
+<h2>SPDV Enterprise - Estoque</h2>
+</div>
+<div>Operador: <strong>Admin</strong></div>
+</header>
+
+<nav id="menu" class="menu">
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="index.html">🛒 Caixa</a>
+<a href="produtos.html">📦 Produtos</a>
+<a href="clientes.html">👥 Clientes</a>
+<a href="compras.html">🚚 Compras</a>
+<a href="estoque.html">📊 Estoque</a>
+<a href="vendas.html">💰 Vendas</a>
+<a href="usuarios.html">👤 Usuários</a>
+<a href="relatorios.html">📈 Relatórios</a>
+<a href="configuracoes.html">⚙ Configurações</a>
+<a href="login.html">🚪 Sair</a>
+</nav>
+
+<main>
+<div class="cards">
+<div class="card"><h3>Total de Produtos</h3><div class="valor" id="totalProdutos">0</div></div>
+<div class="card"><h3>Valor do Estoque</h3><div class="valor" id="valorEstoque">R$ 0,00</div></div>
+<div class="card"><h3>Estoque Baixo</h3><div class="valor" id="estoqueBaixo">0</div></div>
+<div class="card"><h3>Sem Estoque</h3><div class="valor" id="estoqueZerado">0</div></div>
+</div>
+
+<div class="box">
+<h2>Controle de Estoque</h2>
+<div class="filtro">
+<input id="pesquisa" placeholder="Pesquisar produto...">
+<button class="acao" onclick="carregarEstoque()">Atualizar</button>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Código</th><th>Produto</th><th>Estoque</th><th>Preço</th><th>Total</th><th>Status</th>
+</tr>
+</thead>
+<tbody id="listaEstoque">
+<tr><td colspan="6">Carregando...</td></tr>
+</tbody>
+</table>
+</div>
+</main>
+
+<script>
+const menu=document.getElementById('menu');
+document.getElementById('btnMenu').onclick=()=>menu.classList.toggle('open');
+document.addEventListener('click',e=>{
+ if(!menu.contains(e.target)&&e.target.id!=='btnMenu') menu.classList.remove('open');
+});
+
+async function carregarEstoque(){
+ try{
+   const r=await fetch("https://spdv-enterprises.onrender.com/estoque");
+   if(!r.ok) throw new Error();
+   const produtos=await r.json();
+   let html="",baixo=0,zero=0,totalValor=0;
+   produtos.forEach(p=>{
+      const est=Number(p.estoque)||0;
+      const preco=Number(p.preco)||0;
+      totalValor+=est*preco;
+      let cls="status-ok",txt="Normal";
+      if(est===0){cls="status-zero";txt="Zerado";zero++;}
+      else if(est<=5){cls="status-baixo";txt="Baixo";baixo++;}
+      html+=`<tr>
+      <td>${p.codigo}</td>
+      <td style="text-align:left">${p.descricao}</td>
+      <td>${est.toFixed(3)}</td>
+      <td>R$ ${preco.toFixed(2)}</td>
+      <td>R$ ${(est*preco).toFixed(2)}</td>
+      <td class="${cls}">${txt}</td>
+      </tr>`;
+   });
+   document.getElementById("listaEstoque").innerHTML=html||'<tr><td colspan="6">Nenhum produto encontrado.</td></tr>';
+   document.getElementById("totalProdutos").textContent=produtos.length;
+   document.getElementById("estoqueBaixo").textContent=baixo;
+   document.getElementById("estoqueZerado").textContent=zero;
+   document.getElementById("valorEstoque").textContent=totalValor.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+ }catch(e){
+   document.getElementById("listaEstoque").innerHTML='<tr><td colspan="6">Erro ao carregar estoque.</td></tr>';
+ }
+}
+carregarEstoque();
+</script>
+</body>
+</html>

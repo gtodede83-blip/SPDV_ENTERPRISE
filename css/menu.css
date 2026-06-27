@@ -1,0 +1,133 @@
+/* ===========================
+   MENU LATERAL
+=========================== */
+
+.menuLateral{
+    position:fixed;
+    top:0;
+    left:-270px;
+    width:270px;
+    height:100vh;
+    background:#0d1b2a;
+    overflow-y:auto;
+    transition:.3s;
+    z-index:9999;
+    box-shadow:5px 0 20px rgba(0,0,0,.35);
+}
+
+.menuLateral.ativo{
+    left:0;
+}
+
+.logo{
+    text-align:center;
+    padding:25px;
+    color:#fff;
+    border-bottom:1px solid #243447;
+}
+
+.logo h2{
+    font-size:32px;
+    margin-bottom:5px;
+}
+
+.logo small{
+    color:#bfc9d4;
+    font-size:14px;
+}
+
+.menuLateral a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 20px;
+    color:#fff;
+    text-decoration:none;
+    font-size:17px;
+    transition:.25s;
+}
+
+.menuLateral a:hover{
+    background:#0066cc;
+}
+
+.menuLateral hr{
+    border:none;
+    border-top:1px solid #243447;
+    margin:10px 0;
+}
+
+/* ===========================
+   TOPO
+=========================== */
+
+.topo{
+    height:70px;
+    background:#003366;
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 20px;
+}
+
+.topoEsquerda{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.topo h1{
+    font-size:32px;
+    margin:0;
+}
+
+#usuario{
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* ===========================
+   BOTÃO MENU
+=========================== */
+
+#btnMenu{
+    width:48px;
+    height:48px;
+    border:none;
+    border-radius:8px;
+    background:#fff;
+    color:#003366;
+    font-size:28px;
+    cursor:pointer;
+}
+
+#btnMenu:hover{
+    background:#e9ecef;
+}
+
+/* ===========================
+   CONTEÚDO
+=========================== */
+
+.container{
+    padding:20px;
+}
+
+/* ===========================
+   RESPONSIVO
+=========================== */
+
+@media(max-width:768px){
+
+    .topo h1{
+        font-size:22px;
+    }
+
+    #usuario{
+        display:none;
+    }
+
+}

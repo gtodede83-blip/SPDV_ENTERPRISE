@@ -116,30 +116,6 @@ app.delete('/produtos/:id', async (req, res) => {
 
 });
 
-app.get('/produto/:codigo', async (req,res)=>{
-
-    try{
-
-        const resultado = await pool.query(
-            'SELECT * FROM produtos WHERE codigo=$1',
-            [req.params.codigo]
-        );
-
-        res.json(resultado.rows[0]);
-
-    }catch(erro){
-
-        console.log(erro);
-
-        res.status(500).json({
-            erro:'Erro ao buscar produto'
-        });
-
-    }
-
-});
-
-
 app.post('/venda', async (req, res) => {
 
     try {
@@ -431,6 +407,37 @@ app.delete('/clientes/:id', async(req,res)=>{
 
         res.status(500).json({
             erro:erro.message
+        });
+
+    }
+
+});
+
+app.get("/estoque", async (req, res) => {
+
+    try {
+
+        const resultado = await pool.query(`
+            SELECT
+                id,
+                codigo,
+                descricao,
+                preco,
+                estoque,
+                (estoque * preco) AS valor_total
+            FROM produtos
+            ORDER BY descricao
+        `);
+
+        res.json(resultado.rows);
+
+    } catch (erro) {
+
+        console.log("ERRO ESTOQUE:");
+        console.log(erro);
+
+        res.status(500).json({
+            erro: erro.message
         });
 
     }

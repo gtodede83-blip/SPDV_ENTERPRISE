@@ -1,10 +1,16 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SPDV ENTERPRISE - CLIENTES</title>
+
+<link rel="stylesheet" href="css/menu.css">
+
+</head>
 
 <style>
 
@@ -92,11 +98,24 @@ td{
 </style>
 
 </head>
+
 <body>
 
-<header>
-SPDV ENTERPRISE - CLIENTES
-</header>
+<div class="topo">
+
+    <button id="btnMenu" onclick="toggleMenu()">
+        ☰
+    </button>
+
+    <h1>SPDV ENTERPRISE</h1>
+
+    <div id="usuario">
+        Operador: Admin
+    </div>
+
+</div>
+
+<div id="menu"></div>
 
 <div class="container">
 
@@ -287,6 +306,20 @@ async function listarClientes(){
 
 }
 
+document.addEventListener("DOMContentLoaded", async ()=>{
+
+    const menu = document.getElementById("menu");
+
+    if(menu){
+
+        const resposta = await fetch("menu.html");
+
+        menu.innerHTML = await resposta.text();
+
+    }
+
+});
+
 async function excluirCliente(id){
 
     if(!confirm("Deseja excluir este cliente?")){
@@ -307,6 +340,8 @@ listarClientes();
 
 </script>
 
+<script src="js/layout.js"></script>
+
+<script src="js/menu.js"></script>
+
 </body>
-</html>
-```

@@ -178,21 +178,33 @@ button{
 </head>
 <body>
 
-<body>
-
 <div id="menuLateral" class="menuLateral">
 
     <h2>SPDV ENTERPRISE</h2>
 
-    <a href="index.html">🛒 Caixa</a>
-    <a href="produtos.html">📦 Produtos</a>
-    <a href="clientes.html">👥 Clientes</a>
-    <a href="compras.html">🚚 Compras</a>
-    <a href="estoque.html">📊 Estoque</a>
-    <a href="relatorios.html">📈 Relatórios</a>
-    <a href="login.html">👤 Usuários</a>
-    <a href="configuracoes.html">⚙ Configurações</a>
-    <a href="login.html">🚪 Sair</a>
+<a href="dashboard.html">🏠 Dashboard</a>
+
+<a href="index.html">🛒 Caixa</a>
+
+<a href="produtos.html">📦 Produtos</a>
+
+<a href="clientes.html">👥 Clientes</a>
+
+<a href="compras.html">🚚 Compras</a>
+
+<a href="estoque.html">📊 Estoque</a>
+
+<a href="vendas.html">💰 Vendas</a>
+
+<a href="usuarios.html">👤 Usuários</a>
+
+<a href="relatorios.html">📈 Relatórios</a>
+
+<a href="configuracoes.html">⚙ Configurações</a>
+
+<hr>
+
+<a href="login.html">🚪 Sair</a>
 
 </div>
 
@@ -344,7 +356,6 @@ Data:
 
 <script src="caixa.js"></script>
 
-<script>
 
 function atualizarRelogio(){
 
@@ -359,21 +370,34 @@ function atualizarRelogio(){
 }
 
 setInterval(atualizarRelogio,1000);
-
 atualizarRelogio();
 
-</script>
+function abrirMenu(){
+    document.getElementById("menuLateral").classList.toggle("ativo");
+}
 
-</body>
-</html>
+document.addEventListener("click",function(e){
+
+    let menu=document.getElementById("menuLateral");
+    let botao=document.getElementById("btnMenu");
+
+    if(
+        !menu.contains(e.target) &&
+        !botao.contains(e.target)
+    ){
+        menu.classList.remove("ativo");
+    }
+
+});
+
+
 setInterval(atualizarRelogio,1000);
-
 atualizarRelogio();
 
-
-<script src="caixa.js"></script>
+function abrirMenu(){
+    document.getElementById("menuLateral").classList.toggle("ativo");
+}
 
 </script>
 
-</body>
-</html>
+
