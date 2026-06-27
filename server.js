@@ -444,6 +444,58 @@ app.get("/estoque", async (req, res) => {
 
 });
 
+app.get("/dashboard", async (req, res) => {
+
+    try {
+
+        const produtos = await pool.query(
+            "SELECT COUNT(*) FROM produtos"
+        );
+
+        const clientes = await pool.query(
+            "SELECT COUNT(*) FROM clientes"
+        );
+
+        const estoque = await pool.query(
+            "SELECT COALESCE(SUM(estoque),0) total FROM produtos"
+        );
+
+        const vendasHoje = await pool.query(`
+            SELECT COALESCE(SUM(total),0) total
+            FROM vendas
+            WHERE DATE(data_venda)=CURRENT_DATE
+        `);
+
+        const ultimas = await pool.query(`
+            SELECT
+                data_venda,
+                total,
+                pagamento
+            FROM vendas
+            ORDER BY id DESC
+            LIMIT 10
+        `);
+
+        res.json({
+
+            produtos: produtos.rows[0].count,
+            clientes: clientes.rows[0].count,
+            estoque: estoque.rows[0].total,
+            vendasHoje: vendasHoje.rows[0].total,
+            ultimas: ultimas.rows
+
+        });
+
+    } catch (e) {
+
+        res.status(500).json({
+            erro: e.message
+        });
+
+    }
+
+});
+
 app.listen(3000, () => {
 
     console.log('Servidor rodando na porta 3000');
