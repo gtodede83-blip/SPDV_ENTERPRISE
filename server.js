@@ -125,9 +125,11 @@ app.post('/venda', async (req, res) => {
         // grava venda
         const venda = await pool.query(
             `
-            INSERT INTO vendas(total, pagamento)
-            VALUES($1,$2)
-            RETURNING id
+            INSERT INTO vendas (
+            total,
+            forma_pagamento
+         )
+            VALUES ($1,$2)
             `,
             [total, pagamento]
         );
@@ -501,32 +503,24 @@ app.get("/dashboard", async (req, res) => {
 // ===============================
 
 app.get("/relatorios/vendas", async (req, res) => {
-
     try {
 
         const resultado = await pool.query(`
             SELECT
                 id,
+                data,
                 total,
-                pagamento,
-                data_venda
+                forma_pagamento
             FROM vendas
-            ORDER BY data_venda DESC
+            ORDER BY data DESC
         `);
 
         res.json(resultado.rows);
 
     } catch (erro) {
-
-        console.log("ERRO RELATÓRIO DE VENDAS:");
         console.log(erro);
-
-        res.status(500).json({
-            erro: erro.message
-        });
-
+        res.status(500).json({ erro: erro.message });
     }
-
 });
 
 // ===============================
