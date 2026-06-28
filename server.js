@@ -496,6 +496,84 @@ app.get("/dashboard", async (req, res) => {
 
 });
 
+// ===============================
+// RELATÓRIO DE VENDAS
+// ===============================
+
+app.get("/relatorios/vendas", async (req, res) => {
+
+    try {
+
+        const resultado = await pool.query(`
+            SELECT
+                id,
+                total,
+                pagamento,
+                data_venda
+            FROM vendas
+            ORDER BY data_venda DESC
+        `);
+
+        res.json(resultado.rows);
+
+    } catch (erro) {
+
+        console.log("ERRO RELATÓRIO DE VENDAS:");
+        console.log(erro);
+
+        res.status(500).json({
+            erro: erro.message
+        });
+
+    }
+
+});
+
+// ===============================
+// DETALHES DA VENDA
+// ===============================
+
+app.get("/relatorios/venda/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const venda = await pool.query(`
+            SELECT *
+            FROM vendas
+            WHERE id = $1
+        `,[id]);
+
+        const itens = await pool.query(`
+            SELECT
+                codigo,
+                descricao,
+                quantidade,
+                valor
+            FROM itens_venda
+            WHERE venda_id = $1
+        `,[id]);
+
+        res.json({
+
+            venda: venda.rows[0],
+            itens: itens.rows
+
+        });
+
+    } catch (erro) {
+
+        console.log(erro);
+
+        res.status(500).json({
+            erro: erro.message
+        });
+
+    }
+
+});
+
 app.listen(3000, () => {
 
     console.log('Servidor rodando na porta 3000');
