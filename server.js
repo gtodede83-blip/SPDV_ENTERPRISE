@@ -533,34 +533,21 @@ app.get("/relatorios/vendas", async (req, res) => {
 // DETALHES DA VENDA
 // ===============================
 
-app.get("/relatorios/venda/:id", async (req, res) => {
+app.get("/relatorios/vendas", async (req, res) => {
 
     try {
 
-        const { id } = req.params;
-
-        const venda = await pool.query(`
-            SELECT *
-            FROM vendas
-            WHERE id = $1
-        `,[id]);
-
-        const itens = await pool.query(`
+        const resultado = await pool.query(`
             SELECT
-                codigo,
-                descricao,
-                quantidade,
-                valor
-            FROM itens_venda
-            WHERE venda_id = $1
-        `,[id]);
+                id,
+                data,
+                total,
+                pagamento
+            FROM vendas
+            ORDER BY data DESC
+        `);
 
-        res.json({
-
-            venda: venda.rows[0],
-            itens: itens.rows
-
-        });
+        res.json(resultado.rows);
 
     } catch (erro) {
 
