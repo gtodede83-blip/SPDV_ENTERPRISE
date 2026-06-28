@@ -1,1 +1,387 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SPDV Enterprise - Relatórios</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f4f6f9}header{background:#003366;color:#fff;padding:15px 20px;display:flex;justify-content:space-between}.container{padding:20px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-bottom:20px}.card,.filtros{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)}.valor{font-size:30px;color:#003366;font-weight:bold}table{width:100%;border-collapse:collapse;background:#fff;margin-top:20px}th{background:#003366;color:#fff}th,td{padding:10px;border:1px solid #ddd;text-align:center}input,select,button{padding:10px;margin:5px}button{background:#003366;color:#fff;border:none;border-radius:5px}</style></head><body><header><h2>📈 SPDV Enterprise - Relatórios</h2><div>Operador: <b>Admin</b></div></header><div class="container"><div class="cards"><div class="card"><h3>Vendas Hoje</h3><div class="valor" id="vendasHoje">R$ 0,00</div></div><div class="card"><h3>Vendas do Mês</h3><div class="valor" id="vendasMes">R$ 0,00</div></div><div class="card"><h3>Quantidade</h3><div class="valor" id="qtdVendas">0</div></div><div class="card"><h3>Ticket Médio</h3><div class="valor" id="ticketMedio">R$ 0,00</div></div></div><div class="filtros"><input type="date"><input type="date"><select><option>Todos</option><option>PIX</option><option>DINHEIRO</option><option>CRÉDITO</option><option>DÉBITO</option></select><button onclick="carregarRelatorio()">Atualizar</button></div><table><thead><tr><th>ID</th><th>Data</th><th>Pagamento</th><th>Total</th></tr></thead><tbody id="listaVendas"><tr><td colspan='4'>Carregando...</td></tr></tbody></table></div><script>async function carregarRelatorio(){try{const r=await fetch('https://spdv-enterprises.onrender.com<td>${new Date(v.data).toLocaleString("pt-BR")}</td><td>${x.pagamento}</td><td>R$ ${Number(x.total).toFixed(2)}</td></tr>`});document.getElementById('listaVendas').innerHTML=h||'<tr><td colspan=4>Nenhuma venda.</td>/relatorios/vendas');if(!r.ok){document.getElementById('listaVendas').innerHTML='<tr><td colspan=4>Crie a rota /relatorios/vendas no server.js</td></tr>';return;}const v=await r.json();let h='',t=0;v.forEach(x=>{t+=Number(x.total);h+=`<tr><td>${x.id}</td></tr>';document.getElementById('qtdVendas').textContent=v.length;document.getElementById('vendasHoje').textContent='R$ '+t.toFixed(2);document.getElementById('vendasMes').textContent='R$ '+t.toFixed(2);document.getElementById('ticketMedio').textContent='R$ '+(v.length?t/v.length:0).toFixed(2);}catch(e){document.getElementById('listaVendas').innerHTML='<tr><td colspan=4>Erro ao conectar.</td></tr>';}}carregarRelatorio();</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>SPDV Enterprise V2 - Relatórios</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#f5f6fa;
+display:flex;
+}
+
+.sidebar{
+
+width:240px;
+background:#1e293b;
+height:100vh;
+color:white;
+padding:20px;
+position:fixed;
+}
+
+.sidebar h2{
+
+margin-bottom:30px;
+
+}
+
+.sidebar a{
+
+display:block;
+padding:12px;
+text-decoration:none;
+color:white;
+border-radius:8px;
+margin-bottom:8px;
+}
+
+.sidebar a:hover{
+
+background:#334155;
+
+}
+
+.main{
+
+margin-left:240px;
+padding:25px;
+width:100%;
+
+}
+
+.top{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+
+}
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.1);
+
+}
+
+.card h3{
+
+font-size:14px;
+color:#888;
+
+}
+
+.card h2{
+
+margin-top:10px;
+
+}
+
+.filtros{
+
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+display:flex;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+
+}
+
+input,button{
+
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+
+}
+
+button{
+
+background:#2563eb;
+color:white;
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#1d4ed8;
+
+}
+
+table{
+
+width:100%;
+background:white;
+border-collapse:collapse;
+border-radius:12px;
+overflow:hidden;
+
+}
+
+th{
+
+background:#2563eb;
+color:white;
+padding:14px;
+
+}
+
+td{
+
+padding:12px;
+border-bottom:1px solid #eee;
+
+}
+
+canvas{
+
+background:white;
+padding:20px;
+border-radius:12px;
+margin-top:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>SPDV V2</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Vendas</a>
+<a href="#">Produtos</a>
+<a href="#">Caixa</a>
+<a href="#">Relatórios</a>
+<a href="#">Configurações</a>
+
+</div>
+
+<div class="main">
+
+<div class="top">
+
+<h1>Relatórios</h1>
+
+<div>
+
+<button onclick="window.print()">
+Imprimir
+</button>
+
+<button onclick="exportarExcel()">
+Excel
+</button>
+
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Vendas</h3>
+<h2 id="vendas">R$ 0,00</h2>
+</div>
+
+<div class="card">
+<h3>Pedidos</h3>
+<h2 id="pedidos">0</h2>
+</div>
+
+<div class="card">
+<h3>Ticket Médio</h3>
+<h2 id="ticket">R$ 0,00</h2>
+</div>
+
+<div class="card">
+<h3>Pix</h3>
+<h2 id="pix">0%</h2>
+</div>
+
+</div>
+
+<div class="filtros">
+
+<label>Início</label>
+<input type="date" id="inicio">
+
+<label>Fim</label>
+<input type="date" id="fim">
+
+<input
+type="text"
+placeholder="Pesquisar">
+
+<button onclick="carregar()">
+
+Pesquisar
+
+</button>
+
+</div>
+
+<table id="tabela">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Data</th>
+<th>Total</th>
+<th>Pagamento</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<canvas id="grafico"></canvas>
+
+</div>
+
+<script>
+
+let chart;
+
+async function carregar(){
+
+const resposta=await fetch("https://spdv-enterprises.onrender.com/relatorios/vendas");
+
+const dados=await resposta.json();
+
+const tbody=document.querySelector("#tabela tbody");
+
+tbody.innerHTML="";
+
+let total=0;
+
+dados.forEach(v=>{
+
+total+=Number(v.total);
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${v.id}</td>
+
+<td>${v.data}</td>
+
+<td>R$ ${Number(v.total).toFixed(2)}</td>
+
+<td>${v.forma_pagamento}</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("vendas").innerHTML="R$ "+total.toFixed(2);
+
+document.getElementById("pedidos").innerHTML=dados.length;
+
+document.getElementById("ticket").innerHTML="R$ "+(total/dados.length).toFixed(2);
+
+const pix=dados.filter(x=>x.forma_pagamento=="PIX").length;
+
+document.getElementById("pix").innerHTML=((pix/dados.length)*100).toFixed(1)+"%";
+
+grafico(dados);
+
+}
+
+function grafico(dados){
+
+const ctx=document.getElementById("grafico");
+
+if(chart) chart.destroy();
+
+chart=new Chart(ctx,{
+
+type:"bar",
+
+data:{
+
+labels:dados.map(x=>x.data),
+
+datasets:[{
+
+label:"Vendas",
+
+data:dados.map(x=>x.total)
+
+}]
+
+}
+
+});
+
+}
+
+function exportarExcel(){
+
+let tabela=document.getElementById("tabela").outerHTML;
+
+let arquivo='data:application/vnd.ms-excel,'+encodeURIComponent(tabela);
+
+let a=document.createElement("a");
+
+a.href=arquivo;
+
+a.download="relatorio.xls";
+
+a.click();
+
+}
+
+carregar();
+
+</script>
+
+</body>
+
+</html>
