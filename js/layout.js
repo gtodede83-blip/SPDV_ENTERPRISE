@@ -29,3 +29,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+
+window.onload = function () {
+
+    fetch("menu.html")
+        .then(r => r.text())
+        .then(html => {
+            document.getElementById("menu").innerHTML = html;
+        });
+
+}

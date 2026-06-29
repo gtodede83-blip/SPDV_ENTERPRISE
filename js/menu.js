@@ -15,7 +15,7 @@ function toggleMenu() {
 // Fechar ao clicar fora
 document.addEventListener("click", function (e) {
 
-    const menu = document.getElementById("menuLateral");
+    const menu = document.getElementById("menu");
     const botao = document.getElementById("btnMenu");
 
     if (!menu || !botao) return;
@@ -92,3 +92,4 @@ document.addEventListener("click",(e)=>{
     }
 
 });
+

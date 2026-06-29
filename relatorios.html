@@ -9,6 +9,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/layout.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -21,47 +24,20 @@ font-family:Poppins,sans-serif;
 }
 
 body{
-background:#f5f6fa;
-display:flex;
-}
 
-.sidebar{
+    margin:0;
 
-width:240px;
-background:#1e293b;
-height:100vh;
-color:white;
-padding:20px;
-position:fixed;
-}
-
-.sidebar h2{
-
-margin-bottom:30px;
+    background:#eef2f7;
 
 }
 
-.sidebar a{
+.container{
 
-display:block;
-padding:12px;
-text-decoration:none;
-color:white;
-border-radius:8px;
-margin-bottom:8px;
-}
+    width:95%;
 
-.sidebar a:hover{
+    margin:auto;
 
-background:#334155;
-
-}
-
-.main{
-
-margin-left:240px;
-padding:25px;
-width:100%;
+    margin-top:20px;
 
 }
 
@@ -85,36 +61,41 @@ margin-bottom:20px;
 
 .card{
 
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.1);
+    background:#fff;
+
+    border-radius:10px;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.12);
+
+    padding:18px;
 
 }
 
 .card h3{
 
-font-size:14px;
-color:#888;
+    font-size:15px;
+
+    color:#666;
 
 }
 
 .card h2{
 
-margin-top:10px;
+    font-size:36px;
+
+    color:#003366;
 
 }
 
 .filtros{
 
-background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
-display:flex;
-gap:10px;
-align-items:center;
-flex-wrap:wrap;
+    background:white;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
 
 }
 
@@ -128,15 +109,23 @@ border:1px solid #ddd;
 
 button{
 
-background:#2563eb;
-color:white;
-cursor:pointer;
+    background:#003366;
+
+    color:white;
+
+    border:none;
+
+    border-radius:6px;
+
+    padding:10px 18px;
+
+    cursor:pointer;
 
 }
 
 button:hover{
 
-background:#1d4ed8;
+    background:#004d99;
 
 }
 
@@ -152,25 +141,43 @@ overflow:hidden;
 
 th{
 
-background:#2563eb;
-color:white;
-padding:14px;
+    background:#003366;
+
+    color:white;
+
+    font-size:16px;
+
+    padding:14px;
 
 }
 
 td{
 
-padding:12px;
-border-bottom:1px solid #eee;
+    padding:12px;
+
+    border-bottom:1px solid #e5e5e5;
+
+}
+
+tr:hover{
+
+    background:#f4f8ff;
 
 }
 
 canvas{
 
-background:white;
-padding:20px;
-border-radius:12px;
-margin-top:20px;
+    background:white;
+
+    height:320px !important;
+
+    max-height:320px;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    margin-top:20px;
 
 }
 
@@ -180,20 +187,27 @@ margin-top:20px;
 
 <body>
 
-<div class="sidebar">
+<div class="topo">
 
-<h2>SPDV V2</h2>
+    <div style="display:flex;align-items:center;gap:15px;">
 
-<a href="#">Dashboard</a>
-<a href="#">Vendas</a>
-<a href="#">Produtos</a>
-<a href="#">Caixa</a>
-<a href="#">Relatórios</a>
-<a href="#">Configurações</a>
+        <button id="btnMenu" onclick="toggleMenu()">
+    ☰
+</button>
+
+        <h1>SPDV Enterprise - Relatórios</h1>
+
+    </div>
+
+    <div id="usuario">
+        Operador: Admin
+    </div>
 
 </div>
 
-<div class="main">
+<div id="menu"></div>
+
+<div class="container">
 
 <div class="top">
 
@@ -201,13 +215,9 @@ margin-top:20px;
 
 <div>
 
-<button onclick="window.print()">
-Imprimir
-</button>
+<button onclick="window.print()">Imprimir</button>
 
-<button onclick="exportarExcel()">
-Excel
-</button>
+<button onclick="exportarExcel()">Excel</button>
 
 </div>
 
@@ -280,8 +290,6 @@ Pesquisar
 </table>
 
 <canvas id="grafico"></canvas>
-
-</div>
 
 <script>
 
@@ -432,6 +440,8 @@ carregar();
 
 </script>
 
-</body>
+<script src="js/layout.js"></script>
+<script src="js/menu.js"></script>
 
+</body>
 </html>
