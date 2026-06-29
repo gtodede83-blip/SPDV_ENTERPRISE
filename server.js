@@ -148,23 +148,27 @@ app.post("/venda", async (req, res) => {
             await pool.query(
 
                 `
-                INSERT INTO itens_venda
-                (id_venda,codigo,descricao,quantidade,preco,total)
-
-                VALUES
-                ($1,$2,$3,$4,$5,$6)
-                `,
-
-                [
-                    idVenda,
-                    item.codigo,
-                    item.descricao,
-                    item.quantidade,
-                    item.preco,
-                    item.total
-                ]
-
-            );
+                await pool.query(
+`
+INSERT INTO itens_venda
+(
+    venda_id,
+    codigo,
+    descricao,
+    quantidade,
+    valor
+)
+VALUES
+($1,$2,$3,$4,$5)
+`,
+[
+    idVenda,
+    item.codigo,
+    item.descricao,
+    item.quantidade,
+    item.preco
+]
+);
 
             await pool.query(
 
