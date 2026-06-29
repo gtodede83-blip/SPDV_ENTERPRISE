@@ -122,6 +122,11 @@ app.post("/venda", async (req, res) => {
 
         const { itens, total, pagamento } = req.body;
 
+           console.log("=== NOVA VENDA ===");
+           console.log(req.body);
+           console.log("Pagamento:", pagamento);
+           console.log("Total:", total); 
+
         const venda = await pool.query(
 
             `
@@ -443,7 +448,7 @@ app.get("/dashboard", async (req, res) => {
         const vendasHoje = await pool.query(`
             SELECT COALESCE(SUM(total),0) total
             FROM vendas
-            WHERE DATE(data_venda)=CURRENT_DATE
+            WHERE DATE(data)=CURRENT_DATE
         `);
 
         const ultimas = await pool.query(`
