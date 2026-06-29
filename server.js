@@ -509,6 +509,88 @@ app.get("/relatorios/vendas", async(req,res)=>{
 
 });
 
+// APAGAR VENDA
+app.delete("/vendas/:id", async (req, res) => {
+
+    const client = await pool.connect();
+
+    try {
+
+        await client.query("BEGIN");
+
+        const idVenda = req.params.id;
+
+        // Busca os itens da venda
+        const itens = await client.query(
+            `
+            SELECT
+                codigo,
+                quantidade
+            FROM itens_venda
+            WHERE venda_id = $1
+            `,
+            [idVenda]
+        );
+
+        // Devolve o estoque
+        for (const item of itens.rows) {
+
+            await client.query(
+                `
+                UPDATE produtos
+                SET estoque = estoque + $1
+                WHERE codigo = $2
+                `,
+                [
+                    item.quantidade,
+                    item.codigo
+                ]
+            );
+
+        }
+
+        // Exclui os itens
+        await client.query(
+            `
+            DELETE FROM itens_venda
+            WHERE venda_id = $1
+            `,
+            [idVenda]
+        );
+
+        // Exclui a venda
+        await client.query(
+            `
+            DELETE FROM vendas
+            WHERE id = $1
+            `,
+            [idVenda]
+        );
+
+        await client.query("COMMIT");
+
+        res.json({
+            sucesso: true,
+            mensagem: "Venda cancelada com sucesso."
+        });
+
+    } catch (erro) {
+
+        await client.query("ROLLBACK");
+
+        console.log(erro);
+
+        res.status(500).json({
+            erro: erro.message
+        });
+
+    } finally {
+
+        client.release();
+
+    }
+
+});
 
 app.listen(3000, () => {
 

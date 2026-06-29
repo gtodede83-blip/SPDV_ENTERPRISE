@@ -267,6 +267,7 @@ Pesquisar
 <th>Data</th>
 <th>Total</th>
 <th>Pagamento</th>
+<th>Ações</th>
 
 </tr>
 
@@ -288,49 +289,74 @@ let chart;
 
 async function carregar(){
 
-const resposta=await fetch("https://spdv-enterprises.onrender.com/relatorios/vendas");
+    const resposta = await fetch(
+        "https://spdv-enterprises.onrender.com/relatorios/vendas"
+    );
 
-const dados=await resposta.json();
+    const dados = await resposta.json();
 
-const tbody=document.querySelector("#tabela tbody");
+    const tbody = document.querySelector("#tabela tbody");
 
-tbody.innerHTML="";
+    tbody.innerHTML = "";
 
-let total=0;
+    let total = 0;
 
-dados.forEach(v=>{
+    dados.forEach(v => {
 
-total+=Number(v.total);
+        total += Number(v.total);
 
-tbody.innerHTML+=`
+        tbody.innerHTML += `
+        <tr>
 
-<tr>
+            <td>${v.id}</td>
 
-<td>${v.id}</td>
+            <td>${new Date(v.data).toLocaleString("pt-BR")}</td>
 
-<td>${v.data}</td>
+            <td>R$ ${Number(v.total).toFixed(2)}</td>
 
-<td>R$ ${Number(v.total).toFixed(2)}</td>
+            <td>${v.forma_pagamento || "-"}</td>
 
-<td>${v.forma_pagamento}</td>
+            <td>
 
-</tr>
+                <button
+                    onclick="apagarVenda(${v.id})"
+                    style="
+                        background:#dc2626;
+                        color:white;
+                        border:none;
+                        padding:8px 12px;
+                        border-radius:6px;
+                        cursor:pointer;
+                    ">
 
-`;
+                    🗑 Excluir
 
-});
+                </button>
 
-document.getElementById("vendas").innerHTML="R$ "+total.toFixed(2);
+            </td>
 
-document.getElementById("pedidos").innerHTML=dados.length;
+        </tr>
+        `;
 
-document.getElementById("ticket").innerHTML="R$ "+(total/dados.length).toFixed(2);
+    });
 
-const pix=dados.filter(x=>x.forma_pagamento=="PIX").length;
+    document.getElementById("vendas").innerHTML =
+        "R$ " + total.toFixed(2);
 
-document.getElementById("pix").innerHTML=((pix/dados.length)*100).toFixed(1)+"%";
+    document.getElementById("pedidos").innerHTML =
+        dados.length;
 
-grafico(dados);
+    document.getElementById("ticket").innerHTML =
+        "R$ " + (dados.length ? total / dados.length : 0).toFixed(2);
+
+    const pix = dados.filter(
+        x => x.forma_pagamento === "PIX"
+    ).length;
+
+    document.getElementById("pix").innerHTML =
+        (dados.length ? ((pix / dados.length) * 100).toFixed(1) : "0.0") + "%";
+
+    grafico(dados);
 
 }
 
@@ -375,6 +401,30 @@ a.href=arquivo;
 a.download="relatorio.xls";
 
 a.click();
+
+}
+
+async function apagarVenda(id){
+
+    if(!confirm("Deseja realmente cancelar esta venda?")){
+        return;
+    }
+
+    const resposta = await fetch(
+
+        "https://spdv-enterprises.onrender.com/vendas/" + id,
+
+        {
+            method:"DELETE"
+        }
+
+    );
+
+    const dados = await resposta.json();
+
+    alert(dados.mensagem);
+
+    carregar();
 
 }
 
