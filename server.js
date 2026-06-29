@@ -141,54 +141,40 @@ app.post("/venda", async (req, res) => {
 
         );
 
-        const idVenda = venda.rows[0].id;
-
-        for(const item of itens){
-
-            await pool.query(
-
-                `
-                await pool.query(
-`
-INSERT INTO itens_venda
-(
-    venda_id,
-    codigo,
-    descricao,
-    quantidade,
-    valor
-)
-VALUES
-($1,$2,$3,$4,$5)
-`,
-[
-    idVenda,
-    item.codigo,
-    item.descricao,
-    item.quantidade,
-    item.preco
-]
-
+               `
+await pool.query(
+    `
+    INSERT INTO itens_venda
+    (
+        venda_id,
+        codigo,
+        descricao,
+        quantidade,
+        valor
+    )
+    VALUES
+    ($1,$2,$3,$4,$5)
+    `,
+    [
+        idVenda,
+        item.codigo,
+        item.descricao,
+        item.quantidade,
+        item.preco
+    ]
 );
 
-            await pool.query(
-
-                `
-                UPDATE produtos
-
-                SET estoque = estoque - $1
-
-                WHERE codigo=$2
-                `,
-
-                [
-                    item.quantidade,
-                    item.codigo
-                ]
-
-            );
-
-        }
+    await pool.query(
+    `
+    UPDATE produtos
+    SET estoque = estoque - $1
+    WHERE codigo = $2
+    `,
+    [
+        item.quantidade,
+        item.codigo
+    ]
+);
 
         res.json({
             sucesso:true
