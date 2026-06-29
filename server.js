@@ -118,17 +118,14 @@ app.delete('/produtos/:id', async (req, res) => {
 
 app.post("/venda", async (req, res) => {
 
-    try{
+    try {
 
         const { itens, total, pagamento } = req.body;
 
-           console.log("=== NOVA VENDA ===");
-           console.log(req.body);
-           console.log("Pagamento:", pagamento);
-           console.log("Total:", total); 
+        console.log("=== NOVA VENDA ===");
+        console.log(req.body);
 
         const venda = await pool.query(
-
             `
             INSERT INTO vendas
             (data,total,forma_pagamento)
@@ -136,61 +133,64 @@ app.post("/venda", async (req, res) => {
             (NOW(),$1,$2)
             RETURNING id
             `,
-
             [total, pagamento]
-
         );
 
-               `
-await pool.query(
-    `
-    INSERT INTO itens_venda
-    (
-        venda_id,
-        codigo,
-        descricao,
-        quantidade,
-        valor
-    )
-    VALUES
-    ($1,$2,$3,$4,$5)
-    `,
-    [
-        idVenda,
-        item.codigo,
-        item.descricao,
-        item.quantidade,
-        item.preco
-    ]
-);
+        const idVenda = venda.rows[0].id;
 
-    await pool.query(
-    `
-    UPDATE produtos
-    SET estoque = estoque - $1
-    WHERE codigo = $2
-    `,
-    [
-        item.quantidade,
-        item.codigo
-    ]
-);
+        for (const item of itens) {
+
+            await pool.query(
+                `
+                INSERT INTO itens_venda
+                (
+                    venda_id,
+                    codigo,
+                    descricao,
+                    quantidade,
+                    valor
+                )
+                VALUES
+                ($1,$2,$3,$4,$5)
+                `,
+                [
+                    idVenda,
+                    item.codigo,
+                    item.descricao,
+                    item.quantidade,
+                    item.preco
+                ]
+            );
+
+            await pool.query(
+                `
+                UPDATE produtos
+                SET estoque = estoque - $1
+                WHERE codigo = $2
+                `,
+                [
+                    item.quantidade,
+                    item.codigo
+                ]
+            );
+
+        }
 
         res.json({
-            sucesso:true
+            sucesso: true
         });
 
-    }catch(err){
+    } catch (err) {
 
         console.log(err);
 
         res.status(500).json({
-            erro:err.message
+            erro: err.message
         });
 
     }
 
-});
+});;
      
 app.post('/login', async (req,res)=>{
 
