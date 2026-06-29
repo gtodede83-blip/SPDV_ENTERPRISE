@@ -1,79 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>SPDV Enterprise - Compras</title>
+
+<link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/layout.css">
 
 <style>
 
-body{
-font-family:Arial;
-background:#f4f4f4;
-margin:0;
-}
-
-header{
-background:#003366;
-color:white;
-padding:15px;
-font-size:30px;
-}
-
 .container{
-width:95%;
-margin:auto;
-margin-top:20px;
+    width:95%;
+    margin:auto;
+    margin-top:20px;
 }
 
 .card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px #ccc;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
 input{
-width:100%;
-padding:12px;
-margin-top:10px;
-font-size:18px;
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    font-size:18px;
 }
 
 button{
-background:green;
-color:white;
-border:none;
-padding:15px;
-width:100%;
-margin-top:15px;
-font-size:20px;
-cursor:pointer;
+    background:#008000;
+    color:#fff;
+    border:none;
+    padding:15px;
+    width:100%;
+    margin-top:15px;
+    font-size:20px;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+button:hover{
+    background:#0b7a0b;
 }
 
 table{
-width:100%;
-margin-top:20px;
-border-collapse:collapse;
-background:white;
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:#fff;
 }
 
 th{
-background:#003366;
-color:white;
-padding:10px;
+    background:#003366;
+    color:#fff;
+    padding:12px;
 }
 
 td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
 }
 
 </style>
-</head>
 
-<script src="js/layout.js"></script>
-<script src="js/menu.js"></script>
+</head>
 
 <body>
 
@@ -85,7 +82,7 @@ text-align:center;
             ☰
         </button>
 
-        <h1>Entrada de Mercadorias</h1>
+        <h1>SPDV Enterprise - Compras</h1>
 
     </div>
 
@@ -224,12 +221,11 @@ async function entradaMercadoria(){
                 "Content-Type":"application/json"
             },
 
-            body:JSON.stringify({
-
-                codigo,
-                quantidade
-
-            })
+         body: JSON.stringify({
+           codigo,
+           quantidade,
+           custo
+        })
 
         });
 
@@ -319,6 +315,8 @@ function irCusto(){
 
 </script>
 
+<script src="js/layout.js"></script>
+<script src="js/menu.js"></script>
 
 </body>
 </html>
