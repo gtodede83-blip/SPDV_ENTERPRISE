@@ -503,24 +503,30 @@ app.get("/dashboard", async (req, res) => {
 // ===============================
 
 app.get("/relatorios/vendas", async (req, res) => {
+
     try {
 
         const resultado = await pool.query(`
             SELECT
                 id,
                 data,
-                total,
-                forma_pagamento
+                total
             FROM vendas
-            ORDER BY data DESC
+            ORDER BY id DESC
         `);
 
         res.json(resultado.rows);
 
     } catch (erro) {
+
         console.log(erro);
-        res.status(500).json({ erro: erro.message });
+
+        res.status(500).json({
+            erro: erro.message
+        });
+
     }
+
 });
 
 // ===============================
