@@ -214,43 +214,7 @@ if(Number(produto.rows[0].estoque) < Number(item.quantidade)){
     );
 }
 
-// baixa estoque
-await pool.query(
-`
-UPDATE produtos
-SET estoque = estoque - $1
-WHERE codigo = $2
-`,
-[
-item.quantidade,
-item.codigo
-]
-);
-
-               console.log(
-               "BAIXANDO ESTOQUE:",
-                item.codigo,
-                item.quantidade
-                );
-
-        } // fecha for
-
-        res.json({
-            sucesso: true
-        });
-
-    } catch (erro) {
-
-        console.log("ERRO VENDA:");
-        console.log(erro);
-
-        res.status(500).json({
-            erro: erro.message
-        });
-
-    }
-
-});
+       
 app.post('/login', async (req,res)=>{
 
     try{
