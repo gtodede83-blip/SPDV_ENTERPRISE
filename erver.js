@@ -195,6 +195,9 @@ app.post("/venda", async (req, res) => {
     }
 
 });
+
+           // consulta estoque atual
+const produto = await pool.query(
 `
 SELECT estoque
 FROM produtos
@@ -502,13 +505,13 @@ app.get("/dashboard", async (req, res) => {
         `);
 
         const ultimas = await pool.query(`
-        SELECT
-        data,
-        total,
-        forma_pagamento
-        FROM vendas
-        ORDER BY id DESC
-        LIMIT 10
+            SELECT
+                data_venda,
+                total,
+                pagamento
+            FROM vendas
+            ORDER BY id DESC
+            LIMIT 10
         `);
 
         res.json({
@@ -568,6 +571,37 @@ app.get("/relatorios/vendas", async(req,res)=>{
 
 });
 
+// ===============================
+// DETALHES DA VENDA
+// ===============================
+
+app.get("/relatorios/vendas", async (req, res) => {
+
+    try {
+
+        const resultado = await pool.query(`
+            SELECT
+                id,
+                data,
+                total,
+                pagamento
+            FROM vendas
+            ORDER BY data DESC
+        `);
+
+        res.json(resultado.rows);
+
+    } catch (erro) {
+
+        console.log(erro);
+
+        res.status(500).json({
+            erro: erro.message
+        });
+
+    }
+
+});
 
 app.listen(3000, () => {
 
