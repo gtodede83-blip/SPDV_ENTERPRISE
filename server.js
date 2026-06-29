@@ -592,6 +592,39 @@ app.delete("/vendas/:id", async (req, res) => {
 
 });
 
+// REDEFINIR SENHA
+app.put('/usuarios/:id/senha', async (req, res) => {
+
+    try {
+
+        const { senha } = req.body;
+
+        await pool.query(
+            `
+            UPDATE usuarios
+            SET senha = $1
+            WHERE id = $2
+            `,
+            [senha, req.params.id]
+        );
+
+        res.json({
+            sucesso: true,
+            mensagem: "Senha redefinida com sucesso."
+        });
+
+    } catch (erro) {
+
+        console.log(erro);
+
+        res.status(500).json({
+            erro: erro.message
+        });
+
+    }
+
+});
+
 app.listen(3000, () => {
 
     console.log('Servidor rodando na porta 3000');
