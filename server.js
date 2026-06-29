@@ -538,27 +538,33 @@ app.get("/dashboard", async (req, res) => {
 // RELATÓRIO DE VENDAS
 // ===============================
 
-app.get("/relatorios/vendas", async (req, res) => {
+app.get("/relatorios/vendas", async(req,res)=>{
 
-    try {
+    try{
 
-        const resultado = await pool.query(`
+        const vendas = await pool.query(`
+
             SELECT
+
                 id,
                 data,
-                total
+                total,
+                forma_pagamento
+
             FROM vendas
+
             ORDER BY id DESC
+
         `);
 
-        res.json(resultado.rows);
+        res.json(vendas.rows);
 
-    } catch (erro) {
+    }
 
-        console.log(erro);
+    catch(err){
 
         res.status(500).json({
-            erro: erro.message
+            erro:err.message
         });
 
     }
