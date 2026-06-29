@@ -196,25 +196,7 @@ app.post("/venda", async (req, res) => {
 
 });
 `
-SELECT estoque
-FROM produtos
-WHERE codigo=$1
-`,
-[item.codigo]
-);
-
-if(produto.rows.length == 0){
-    throw new Error("Produto não encontrado");
-}
-
-if(Number(produto.rows[0].estoque) < Number(item.quantidade)){
-    throw new Error(
-        "Estoque insuficiente para o produto " +
-        item.descricao
-    );
-}
-
-       
+     
 app.post('/login', async (req,res)=>{
 
     try{
