@@ -116,49 +116,85 @@ app.delete('/produtos/:id', async (req, res) => {
 
 });
 
-app.post('/venda', async (req, res) => {
+app.post("/venda", async (req, res) => {
 
-    try {
+    try{
 
         const { itens, total, pagamento } = req.body;
 
-        // grava venda
         const venda = await pool.query(
+
             `
-            INSERT INTO vendas (
-            total,
-            forma_pagamento
-         )
-            VALUES ($1,$2)
+            INSERT INTO vendas
+            (data,total,forma_pagamento)
+            VALUES
+            (NOW(),$1,$2)
+            RETURNING id
             `,
+
             [total, pagamento]
+
         );
 
-        const venda_id = venda.rows[0].id;
+        const idVenda = venda.rows[0].id;
 
-        // grava itens e baixa estoque
-        for (let item of itens) {
+        for(const item of itens){
 
-await pool.query(
-`
-INSERT INTO itens_venda
-(
-    venda_id,
-    codigo,
-    descricao,
-    quantidade,
-    valor
-)
-VALUES($1,$2,$3,$4,$5)
-`,
-[
-    venda_id,
-    item.codigo,
-    item.descricao,
-    item.quantidade,
-    item.preco
-]
-);
+            await pool.query(
+
+                `
+                INSERT INTO itens_venda
+                (id_venda,codigo,descricao,quantidade,preco,total)
+
+                VALUES
+                ($1,$2,$3,$4,$5,$6)
+                `,
+
+                [
+                    idVenda,
+                    item.codigo,
+                    item.descricao,
+                    item.quantidade,
+                    item.preco,
+                    item.total
+                ]
+
+            );
+
+            await pool.query(
+
+                `
+                UPDATE produtos
+
+                SET estoque = estoque - $1
+
+                WHERE codigo=$2
+                `,
+
+                [
+                    item.quantidade,
+                    item.codigo
+                ]
+
+            );
+
+        }
+
+        res.json({
+            sucesso:true
+        });
+
+    }catch(err){
+
+        console.log(err);
+
+        res.status(500).json({
+            erro:err.message
+        });
+
+    }
+
+});
 
            // consulta estoque atual
 const produto = await pool.query(
