@@ -168,6 +168,7 @@ VALUES
     item.quantidade,
     item.preco
 ]
+
 );
 
             await pool.query(
