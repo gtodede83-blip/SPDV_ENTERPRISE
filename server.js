@@ -195,7 +195,6 @@ app.post("/venda", async (req, res) => {
     }
 
 });
-`
      
 app.post('/login', async (req,res)=>{
 
