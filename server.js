@@ -625,6 +625,95 @@ app.put('/usuarios/:id/senha', async (req, res) => {
 
 });
 
+app.get("/usuarios", async (req,res)=>{
+
+    try{
+
+        const resultado = await pool.query(`
+            SELECT
+                id,
+                nome,
+                usuario,
+                perfil
+            FROM usuarios
+            ORDER BY id
+        `);
+
+        res.json(resultado.rows);
+
+    }catch(err){
+
+        res.status(500).json({
+            erro:err.message
+        });
+
+    }
+
+});
+
+app.post("/usuarios", async (req,res)=>{
+
+    try{
+
+        const {nome,usuario,senha,perfil} = req.body;
+
+        await pool.query(
+            `
+            INSERT INTO usuarios
+            (nome,usuario,senha,perfil)
+            VALUES($1,$2,$3,$4)
+            `,
+            [nome,usuario,senha,perfil]
+        );
+
+        res.json({
+            mensagem:"Usuário cadastrado com sucesso"
+        });
+
+    }catch(err){
+
+        res.status(500).json({
+            erro:err.message
+        });
+
+    }
+
+});
+
+app.delete("/usuarios/:id", async(req,res)=>{
+
+    try{
+
+        await pool.query(
+            `
+            DELETE FROM usuarios
+            WHERE id=$1
+            `,
+            [req.params.id]
+        );
+
+        res.json({
+            mensagem:"Usuário excluído"
+        });
+
+    }catch(err){
+
+        res.status(500).json({
+            erro:err.message
+        });
+
+    }
+
+});
+
+app.put("/usuarios/:id/bloquear", async(req,res)=>{
+
+    res.json({
+        mensagem:"Função de bloqueio criada."
+    });
+
+});
+
 app.listen(3000, () => {
 
     console.log('Servidor rodando na porta 3000');

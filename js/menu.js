@@ -3,93 +3,62 @@
 // MENU.JS
 // =========================
 
-// Abrir e Fechar Menu
+// Abrir / Fechar Menu
 function toggleMenu() {
 
     const menu = document.getElementById("menuLateral");
+
+    if (!menu) return;
 
     menu.classList.toggle("ativo");
 
 }
 
-// Fechar ao clicar fora
-document.addEventListener("click", function (e) {
+// Fechar clicando fora
+document.addEventListener("click", function(e){
 
-    const menu = document.getElementById("menu");
+    const menu = document.getElementById("menuLateral");
     const botao = document.getElementById("btnMenu");
 
-    if (!menu || !botao) return;
+    if(!menu || !botao) return;
 
-    if (!menu.contains(e.target) && !botao.contains(e.target)) {
-
+    if(
+        !menu.contains(e.target) &&
+        !botao.contains(e.target)
+    ){
         menu.classList.remove("ativo");
-
     }
 
 });
 
 // Fechar com ESC
-document.addEventListener("keydown", function (e) {
+document.addEventListener("keydown", function(e){
 
-    if (e.key === "Escape") {
+    if(e.key === "Escape"){
 
-        document
-            .getElementById("menuLateral")
-            ?.classList.remove("ativo");
+        const menu = document.getElementById("menuLateral");
+
+        if(menu){
+            menu.classList.remove("ativo");
+        }
 
     }
 
 });
 
 // Destacar página atual
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function(){
 
     const pagina = window.location.pathname.split("/").pop();
 
-    const links = document.querySelectorAll("#menuLateral a");
+    document.querySelectorAll("#menuLateral a").forEach(link=>{
 
-    links.forEach(link => {
+        if(link.getAttribute("href") === pagina){
 
-        if (link.getAttribute("href") === pagina) {
-
-            link.style.background = "#0066cc";
-            link.style.fontWeight = "bold";
+            link.classList.add("ativo");
 
         }
 
     });
 
 });
-
-function toggleMenu(){
-
-    document
-    .getElementById("menuLateral")
-    .classList.toggle("ativo");
-
-}
-
-document.addEventListener("click",(e)=>{
-
-    const menu=document.getElementById("menuLateral");
-
-    const botao=document.getElementById("btnMenu");
-
-    if(!menu) return;
-
-    if(botao){
-
-        if(
-            !menu.contains(e.target)
-            &&
-            !botao.contains(e.target)
-        ){
-
-            menu.classList.remove("ativo");
-
-        }
-
-    }
-
-});
-
