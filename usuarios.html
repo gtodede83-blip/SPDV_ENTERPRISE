@@ -95,6 +95,29 @@ td{
 
 }
 
+.btnSenha{
+    background:#1976d2;
+    margin-left:4px;
+}
+
+.btnBloquear{
+    background:#616161;
+    margin-left:4px;
+}
+
+.btnEditar,
+.btnSenha,
+.btnBloquear,
+.btnExcluir{
+
+    width:38px;
+    height:38px;
+    padding:0;
+    border-radius:6px;
+    font-size:18px;
+
+}
+
 </style>
 
 </head>
@@ -119,7 +142,7 @@ Operador: Admin
 
 </div>
 
-<div id="menu"></div>
+<<div id="menuLateral"></div>
 
 <div class="container">
 
@@ -175,6 +198,14 @@ SALVAR USUÁRIO
 
 </tr>
 
+<button class="btnEditar" onclick="editar(1)">✏️</button>
+
+<button class="btnSenha" onclick="redefinirSenha(1)">🔑</button>
+
+<button class="btnBloquear" onclick="bloquear(1)">🔒</button>
+
+<button class="btnExcluir" disabled>🗑️</button>
+
 </thead>
 
 <tbody id="listaUsuarios">
@@ -211,23 +242,42 @@ async function carregarUsuarios(){
 
         <td>${u.perfil}</td>
 
-        <td>
+       <td>
 
-        <button
-        class="btnEditar"
-        onclick="editar(${u.id})">
+       <button
+       class="btnEditar"
+       onclick="editar(${u.id})"
+       title="Editar">
 
-        Editar
+       ✏️
 
-        </button>
+       </button>
 
-        <button
-        class="btnExcluir"
-        onclick="excluir(${u.id})">
+      <button
+       class="btnSenha"
+       onclick="redefinirSenha(${u.id})"
+       title="Redefinir Senha">
 
-        Excluir
+       🔑
 
-        </button>
+       </button>
+
+       <button
+       class="btnBloquear"
+       onclick="bloquear(${u.id})"
+       title="Bloquear">
+
+      🔒
+
+      </button>
+
+      ${
+      u.usuario.toLowerCase()=="admin"
+      ?
+      `<button class="btnExcluir" disabled>🗑️</button>`
+      :
+     `<button class="btnExcluir" onclick="excluir(${u.id})">🗑️</button>`
+      }
 
         </td>
 
@@ -309,6 +359,61 @@ function editar(id){
 }
 
 carregarUsuarios();
+
+async function redefinirSenha(id){
+
+    const senha = prompt("Digite a nova senha:");
+
+    if(!senha) return;
+
+    const resposta = await fetch(
+
+        "https://spdv-enterprises.onrender.com/usuarios/"+id+"/senha",
+
+        {
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                senha:senha
+            })
+
+        }
+
+    );
+
+    const dados = await resposta.json();
+
+    alert(dados.mensagem);
+
+}
+
+async function bloquear(id){
+
+    if(!confirm("Alterar situação deste usuário?"))
+        return;
+
+    const resposta = await fetch(
+
+        "https://spdv-enterprises.onrender.com/usuarios/"+id+"/bloquear",
+
+        {
+            method:"PUT"
+        }
+
+    );
+
+    const dados = await resposta.json();
+
+    alert(dados.mensagem);
+
+    carregarUsuarios();
+
+}
 
 </script>
 
