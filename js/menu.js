@@ -7,24 +7,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const menu = document.getElementById("menuLateral");
 
-    if (!menu) return;
-
     menu.innerHTML = `
-        <div class="logo">
-            <h2>SPDV</h2>
-            <small>Enterprise</small>
-        </div>
+        <div class="menuLateral">
 
-        <a href="dashboard.html">🏠 Dashboard</a>
-        <a href="vendas.html">💰 Vendas</a>
-        <a href="produtos.html">📦 Produtos</a>
-        <a href="clientes.html">👥 Clientes</a>
-        <a href="estoque.html">📋 Estoque</a>
-        <a href="relatorios.html">📊 Relatórios</a>
-        <a href="usuarios.html">👤 Usuários</a>
-        <a href="configuracoes.html">⚙ Configurações</a>
+            <div class="logo">
+                <h2>SPDV<br><small>Enterprise</small></h2>
+            </div>
+
+            <a href="dashboard.html">🏠 Dashboard</a>
+            <a href="produtos.html">📦 Produtos</a>
+            <a href="clientes.html">👥 Clientes</a>
+            <a href="estoque.html">📋 Estoque</a>
+            <a href="vendas.html">💰 Vendas</a>
+            <a href="usuarios.html">👤 Usuários</a>
+            <a href="relatorios.html">📊 Relatórios</a>
+            <a href="configuracoes.html">⚙️ Configurações</a>
+            <hr>
+            <a href="login.html">🚪 Sair</a>
+
+        </div>
     `;
 
+});
     const pagina = window.location.pathname.split("/").pop();
 
     menu.querySelectorAll("a").forEach(link => {
