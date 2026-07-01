@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const menu = document.getElementById("menuLateral");
 
+    if (!menu) return;
+
     menu.innerHTML = `
         <div class="menuLateral">
 
@@ -22,13 +24,15 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="usuarios.html">👤 Usuários</a>
             <a href="relatorios.html">📊 Relatórios</a>
             <a href="configuracoes.html">⚙️ Configurações</a>
+
             <hr>
+
             <a href="login.html">🚪 Sair</a>
 
         </div>
     `;
 
-});
+    // Destacar página atual
     const pagina = window.location.pathname.split("/").pop();
 
     menu.querySelectorAll("a").forEach(link => {
@@ -41,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// Abrir / Fechar
+// Abrir / Fechar Menu
 function toggleMenu() {
 
     const menu = document.getElementById("menuLateral");
@@ -72,9 +76,9 @@ document.addEventListener("click", function(e){
 // Fechar com ESC
 document.addEventListener("keydown", function(e){
 
-    if(e.key==="Escape"){
+    if(e.key === "Escape"){
 
-        const menu=document.getElementById("menuLateral");
+        const menu = document.getElementById("menuLateral");
 
         if(menu){
             menu.classList.remove("ativo");
