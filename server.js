@@ -190,7 +190,7 @@ app.post("/venda", async (req, res) => {
 
     }
 
-});;
+});
      
 app.post('/login', async (req,res)=>{
 
@@ -234,15 +234,21 @@ app.post('/entrada', async (req,res)=>{
 
     try{
 
-        const {codigo, quantidade} = req.body;
+        const { codigo, quantidade, custo } = req.body;
 
         await pool.query(
             `
             UPDATE produtos
-            SET estoque = estoque + $1
-            WHERE codigo = $2
+            SET
+                estoque = estoque + $1,
+                preco = COALESCE($2, preco)
+            WHERE codigo = $3
             `,
-            [quantidade,codigo]
+            [
+                quantidade,
+                custo,
+                codigo
+            ]
         );
 
         res.json({
@@ -706,16 +712,27 @@ app.delete("/usuarios/:id", async(req,res)=>{
 
 });
 
-app.put("/usuarios/:id/bloquear", async(req,res)=>{
+app.put("/usuarios/:id/bloquear", async (req,res)=>{
 
-    res.json({
-        mensagem:"Função de bloqueio criada."
-    });
+    try{
 
-});
+        await pool.query(`
+            UPDATE usuarios
+            SET ativo = NOT ativo
+            WHERE id = $1
+        `,[req.params.id]);
 
-app.listen(3000, () => {
+        res.json({
+            sucesso:true,
+            mensagem:"Situação do usuário alterada."
+        });
 
-    console.log('Servidor rodando na porta 3000');
+    }catch(err){
+
+        res.status(500).json({
+            erro:err.message
+        });
+
+    }
 
 });
